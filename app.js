@@ -1,0 +1,34 @@
+const DEFAULT_BETS={"below2": 50, "at2": 100, "at3": 150, "at4": 250, "at5": 400, "at6": 500, "at7": 600};
+const state={rc:0,cardsSeen:0,decks:6,bets:loadBets()};
+function $(id){return document.getElementById(id)}
+function loadBets(){try{return{...DEFAULT_BETS,...JSON.parse(localStorage.getItem('bjstrategy.bets')||'null')}}catch{return{...DEFAULT_BETS}}}
+function saveBets(){localStorage.setItem('bjstrategy.bets',JSON.stringify(state.bets))}
+function decksRemaining(){return Math.max(1,(52*state.decks-state.cardsSeen))/52}
+function tc(){return state.rc/decksRemaining()}
+function fmt(n){n=Math.round(n*100)/100;return(n>=0?'+':'')+n.toFixed(2)}
+function bet(){let t=tc();if(t>=7)return +state.bets.at7;if(t>=6)return +state.bets.at6;if(t>=5)return +state.bets.at5;if(t>=4)return +state.bets.at4;if(t>=3)return +state.bets.at3;if(t>=2)return +state.bets.at2;return +state.bets.below2}
+function update(){let t=tc(),b=bet();$('runningCount').textContent=state.rc>0?'+'+state.rc:state.rc;$('trueCount').textContent=fmt(t);$('betSize').textContent='$'+b;$('versionTC').textContent=fmt(t);$('versionBet').textContent=b;$('strategyTC').textContent=fmt(t)}
+function card(type){if(type==='low')state.rc++;if(type==='high')state.rc--;state.cardsSeen++;update();renderTable()}
+function hard(t,d){if(t>=17)return'stand';if(t>=13)return d<=6?'stand':'hit';if(t===12)return d>=4&&d<=6?'stand':'hit';if(t===11)return d===11?'hit':'double';if(t===10)return d<=9?'double':'hit';if(t===9)return d>=3&&d<=6?'double':'hit';return'hit'}
+function soft(t,d){if(t>=19)return'stand';if(t===18)return d>=3&&d<=6?'double':([2,7,8].includes(d)?'stand':'hit');if(t===17)return d>=3&&d<=6?'double':'hit';if(t>=14)return d>=4&&d<=6?'double':'hit';if(t>=12)return d>=5&&d<=6?'double':'hit';return'hit'}
+function pair(t,d){if(t===11)return'split';if(t===10)return'stand';if(t===9)return(d<=6||d===8||d===9)?'split':'stand';if(t===8)return'split';if(t===7)return d<=7?'split':'hit';if(t===6)return d<=6?'split':'hit';if(t===5)return d<=9?'double':'hit';if(t===4)return(d===5||d===6)?'split':'hit';if(t===3||t===2)return d<=7?'split':'hit';return'hit'}
+function th(t,i,lo,hi,strict=false){return strict?(t>i?hi:lo):(t>=i?hi:lo)}
+function act(type,t,d,T){let a=type==='hard'?hard(t,d):type==='soft'?soft(t,d):pair(t,d);
+if(type==='hard'){if(t===16&&d===10)a=th(T,0,'hit','stand');if(t===15&&d===10)a=th(T,4,'hit','stand');if(t===10&&d===10)a=th(T,4,'hit','double');if(t===12&&d===3)a=th(T,2,'hit','stand');if(t===12&&d===2)a=th(T,3,'hit','stand');if(t===11&&d===11)a=th(T,1,'hit','double');if(t===9&&d===2)a=th(T,1,'hit','double');if(t===10&&d===11)a=th(T,4,'hit','double');if(t===9&&d===7)a=th(T,3,'hit','double');if(t===16&&d===9)a=th(T,5,'hit','stand');if(t===13&&d===2)a=th(T,-1,'hit','stand');if(t===12&&d===4)a=th(T,0,'hit','stand');if(t===12&&d===5)a=th(T,-2,'hit','stand');if(t===12&&d===6)a=th(T,-1,'hit','stand');if(t===13&&d===3)a=th(T,-2,'hit','stand');if(t===8&&d===6)a=th(T,2,'hit','double');if(t===16&&d===11)a=th(T,5,'hit','stand')}
+if(type==='soft'){if(t===18&&d===6)a=th(T,1,'stand','double');if(t===20&&d===6)a=th(T,5,'stand','double');if(t===18&&d===4)a=th(T,3,'stand','double');if(t===18&&d===5)a=th(T,1,'stand','double');if(t===17&&d===2)a=th(T,1,'hit','double')}
+if(type==='pair'){if(t===10&&d===5)a=th(T,5,'stand','split');if(t===10&&d===6)a=th(T,4,'stand','split');if(t===10&&d===4)a=th(T,6,'stand','split',true);if(t===9&&d===7)a=th(T,3,'stand','split');if(t===5&&(d===10||d===11))a=th(T,4,'hit','double')}return a}
+function decision(t,d,T){let a=act('hard',t,d,T),s=null;if(t===16&&[9,10,11].includes(d))s='surrender';if(t===16&&d===8&&T>=4)s='surrender';if(t===15&&d===11&&T>=1)s='surrender';if(t===15&&d===10&&T>=0)s='surrender';if(t===15&&d===9&&T>=2)s='surrender';if(t===14&&d===10&&T>=3)s='surrender';return{a,s}}
+function code(a){return{hit:'H',stand:'S',double:'D',split:'P'}[a]||'?'}
+function renderTable(){let ds=[11,2,3,4,5,6,7,8,9,10],T=tc(),rows=[['HARD 5','hard',5],['HARD 6','hard',6],['HARD 7','hard',7],['HARD 8','hard',8],['HARD 9','hard',9],['HARD 10','hard',10],['HARD 11','hard',11],['HARD 12','hard',12],['HARD 13','hard',13],['HARD 14','hard',14],['HARD 15','hard',15],['HARD 16','hard',16],['HARD 17','hard',17],['SOFT A2','soft',13],['SOFT A3','soft',14],['SOFT A4','soft',15],['SOFT A5','soft',16],['SOFT A6','soft',17],['SOFT A7','soft',18],['SOFT A8','soft',19],['SOFT A9','soft',20],['PAIR 22','pair',2],['PAIR 33','pair',3],['PAIR 44','pair',4],['PAIR 55','pair',5],['PAIR 66','pair',6],['PAIR 77','pair',7],['PAIR 88','pair',8],['PAIR 99','pair',9],['PAIR TT','pair',10],['PAIR AA','pair',11]];let b=$('strategyBody');b.innerHTML='';for(let r of rows){let tr=document.createElement('tr'),h=document.createElement('td');h.textContent=r[0];tr.appendChild(h);for(let d of ds){let a,s;if(r[1]==='hard'&&[14,15,16].includes(r[2])){let q=decision(r[2],d,T);a=q.a;s=q.s}else{a=act(r[1],r[2],d,T)}let td=document.createElement('td');td.textContent=s?'SR/'+code(a):code(a);td.className='action-'+(s?'surrender':a);tr.appendChild(td)}b.appendChild(tr)}}
+function openSettings(){let b=state.bets;['below2','at2','at3','at4','at5','at6','at7'].forEach(k=>$(k==='below2'?'betBelow2':'betAt'+k.slice(2)).value=b[k]);$('overlay').classList.remove('hidden')}
+function closeSettings(){let ids=['betBelow2','betAt2','betAt3','betAt4','betAt5','betAt6','betAt7'],ks=['below2','at2','at3','at4','at5','at6','at7'];ids.forEach((id,i)=>state.bets[ks[i]]=Math.max(1,parseInt($(id).value||1)));saveBets();$('overlay').classList.add('hidden');update();renderTable()}
+$('menuButton').onclick=openSettings;$('strategyMenuButton').onclick=openSettings;$('closeSettings').onclick=closeSettings;
+$('resetBets').onclick=()=>{state.bets={...DEFAULT_BETS};saveBets();openSettings();update()}
+$('strategyButton').onclick=()=>{$('counterScreen').classList.add('hidden');$('strategyScreen').classList.remove('hidden');renderTable()}
+$('counterButton').onclick=()=>{$('strategyScreen').classList.add('hidden');$('counterScreen').classList.remove('hidden')}
+let sx=0,sy=0;
+$('counterArea').addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+$('counterArea').addEventListener('touchend',e=>{let dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.max(Math.abs(dx),Math.abs(dy))<45)return;if(Math.abs(dx)>Math.abs(dy))card(dx>0?'high':'low');else card('neutral')});
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')card('low');if(e.key==='ArrowRight')card('high');if(e.key==='ArrowUp')card('neutral')});
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('service-worker.js'));
+update();renderTable();

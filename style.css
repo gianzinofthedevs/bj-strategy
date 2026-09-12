@@ -1,0 +1,35 @@
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{color-scheme:dark;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Helvetica,Arial,sans-serif;background:#000;color:#fff}
+html,body{margin:0;background:#000;overflow:hidden;touch-action:manipulation}
+button,input{font:inherit;color:inherit}
+.screen{width:100%;height:100svh;background:#000;position:relative;overflow:hidden}
+.hidden{display:none!important}
+.topbar{height:calc(58px + env(safe-area-inset-top));padding:env(safe-area-inset-top) 18px 0;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #171717}
+.topbar b{font-size:17px;font-weight:650}
+.topbar button{border:0;background:transparent;width:44px;height:44px;font-size:19px;letter-spacing:3px}
+.counterArea{position:absolute;inset:calc(58px + env(safe-area-inset-top)) 0 0;display:flex;flex-direction:column;align-items:center;justify-content:center;touch-action:none;user-select:none}
+.label,.stats span{color:#7d7d82;font-size:11px;letter-spacing:1.5px;font-weight:650}
+.count{font-size:clamp(76px,24vw,116px);line-height:1;font-weight:250;letter-spacing:-5px;margin:9px 0 40px;font-variant-numeric:tabular-nums}
+.stats{display:flex;gap:48px;text-align:center}
+.stats>div{min-width:110px}.stats strong{display:block;font-size:27px;margin-top:7px;font-weight:450;font-variant-numeric:tabular-nums}
+.hint{position:absolute;bottom:calc(90px + env(safe-area-inset-bottom));color:#3e3e43;font-size:12px}
+.bottomButton{position:absolute;left:18px;right:18px;bottom:calc(44px + env(safe-area-inset-bottom));height:44px;border:1px solid #252525;border-radius:12px;background:#0d0d0d;font-size:12px;font-weight:650;letter-spacing:1px}
+.version{position:absolute;left:0;right:0;bottom:calc(6px + env(safe-area-inset-bottom));text-align:center;color:#76767b;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:28px;font-weight:500;line-height:1;font-variant-numeric:tabular-nums}
+.strategyTop{height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid #171717;color:#8b8b90;font-size:12px}
+.strategyTop button{background:#0d0d0d;border:1px solid #252525;border-radius:9px;padding:7px 10px;font-size:10px;letter-spacing:.8px}
+.strategyTop b{color:#fff}.tableWrap{height:calc(100svh - 116px);overflow:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:max-content;min-width:100%;font-size:11px;table-layout:fixed}
+th,td{border:1px solid #1d1d1f;width:38px;height:38px;padding:0;text-align:center;font-weight:600}
+thead th{height:35px;background:#080808;color:#9b9ba0;font-size:10px;position:sticky;top:0;z-index:2}
+th:first-child,td:first-child{width:94px;min-width:94px;background:#080808;color:#b8b8bd;position:sticky;left:0;z-index:3}
+thead th:first-child{z-index:4}.action-double,.action-split{font-weight:800}.action-surrender{color:#aaa;font-weight:800}
+.legend{position:absolute;left:0;right:0;bottom:env(safe-area-inset-bottom);height:58px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.96);border-top:1px solid #171717;color:#66666b;font-size:8px}
+.overlay{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.62);display:flex;align-items:flex-end}
+.panel{width:100%;max-height:92svh;overflow:auto;background:#101010;border-top:1px solid #2a2a2a;border-radius:18px 18px 0 0;padding:12px 18px calc(22px + env(safe-area-inset-bottom))}
+.panelHeader{display:flex;align-items:center;justify-content:space-between}.panelHeader h2{font-size:20px}.panelHeader button{border:0;background:transparent;color:#b8b8bd}
+.section{border-top:1px solid #262626;padding:18px 0 5px}.sectionTitle{color:#707075;font-size:10px;letter-spacing:1.3px;font-weight:700;margin-bottom:8px}
+.betRow{min-height:46px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #202020;font-size:15px}
+.betRow input{width:84px;height:34px;border:1px solid #303033;border-radius:8px;background:#181818;text-align:right;padding:0 9px;outline:0}
+#resetBets{width:100%;height:42px;margin-top:14px;border:1px solid #2d2d2d;border-radius:10px;background:#171717;color:#b8b8bd;font-size:11px;letter-spacing:1px;font-weight:650}
+.info{color:#7e7e83;font-size:13px;line-height:1.45}
+@media(min-width:700px){.screen{max-width:430px;margin:auto;border-left:1px solid #151515;border-right:1px solid #151515}}

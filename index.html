@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BJ Strategy">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="stylesheet" href="style.css">
+<title>BJ Strategy</title>
+</head>
+<body>
+<main>
+<section id="counterScreen" class="screen">
+<header class="topbar"><b>BJ Strategy</b><button id="menuButton">•••</button></header>
+<div id="counterArea" class="counterArea">
+<div class="label">RUNNING COUNT</div><div id="runningCount" class="count">0</div>
+<div class="stats">
+<div><span>TRUE COUNT</span><strong id="trueCount">+0.00</strong></div>
+<div><span>BET</span><strong id="betSize">$50</strong></div>
+</div>
+<div class="hint">← low&nbsp;&nbsp;&nbsp;↑ neutral&nbsp;&nbsp;&nbsp;high →</div>
+</div>
+<button id="strategyButton" class="bottomButton">STRATEGY</button>
+<div class="version">Version: <span id="versionTC">+0.00</span>.<span id="versionBet">50</span></div>
+</section>
+
+<section id="strategyScreen" class="screen hidden">
+<header class="topbar"><b>BJ Strategy</b><button id="strategyMenuButton">•••</button></header>
+<div class="strategyTop"><button id="counterButton">COUNTER</button><span>TC <b id="strategyTC">+0.00</b></span></div>
+<div class="tableWrap"><table><thead><tr><th>PLAYER’S HAND</th><th>A</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr></thead><tbody id="strategyBody"></tbody></table></div>
+<div class="legend">H HIT&nbsp;&nbsp; S STAND&nbsp;&nbsp; D DOUBLE&nbsp;&nbsp; P SPLIT&nbsp;&nbsp; SR SURRENDER</div>
+</section>
+</main>
+
+<div id="overlay" class="overlay hidden"><div class="panel">
+<div class="panelHeader"><h2>Settings</h2><button id="closeSettings">Done</button></div>
+<div class="section"><div class="sectionTitle">BET SPREAD</div>
+<div class="betRow"><span>TC &lt; +2</span><input id="betBelow2" type="number" min="1" inputmode="numeric"></div>
+<div class="betRow"><span>TC ≥ +2</span><input id="betAt2" type="number" min="1" inputmode="numeric"></div>
+<div class="betRow"><span>TC ≥ +3</span><input id="betAt3" type="number" min="1" inputmode="numeric"></div>
+<div class="betRow"><span>TC ≥ +4</span><input id="betAt4" type="number" min="1" inputmode="numeric"></div>
+<div class="betRow"><span>TC ≥ +5</span><input id="betAt5" type="number" min="1" inputmode="numeric"></div>
+<div class="betRow"><span>TC ≥ +6</span><input id="betAt6" type="number" min="1" inputmode="numeric"></div>
+<div class="betRow"><span>TC ≥ +7</span><input id="betAt7" type="number" min="1" inputmode="numeric"></div>
+<button id="resetBets">RESET BET SPREAD</button></div>
+<div class="section"><div class="sectionTitle">SHOE</div><div class="info">6 decks · cut card 65 cards</div></div>
+<div class="section"><div class="sectionTitle">RULES</div><div class="info">S17 · DAS · Late Surrender · Blackjack 3:2 · Dealer peek</div></div>
+</div></div>
+<script src="app.js"></script>
+</body></html>
